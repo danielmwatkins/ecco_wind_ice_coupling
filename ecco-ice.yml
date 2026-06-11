@@ -1,0 +1,18 @@
+name: 'ecco-ice'
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - cartopy
+  - dask
+  - jupyter
+  - xarray
+  - netcdf4
+  - pandas
+  - pyproj
+  - ultraplot
+  - xesmf
+  - xgcm
+prefix: /opt/miniconda3/envs/calval
+
+

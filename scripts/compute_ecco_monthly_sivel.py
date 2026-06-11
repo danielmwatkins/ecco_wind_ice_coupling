@@ -1,9 +1,13 @@
 """ Computing monthly means from the ECCO daily mean data.
 
-Sea ice concentration and thickness
-- Simple average into monthly files for each year
-- Combine files into single monthly-mean-resolution file for 1992-2017
-- Only keep the Arctic tiles
+Sea ice velocity
+- Select Arctic regions and combine daily data into individual years
+- Load the daily data of SIarea for the year
+- Mask the sea ice velocity where the SIarea is 0
+- Compute u_east and u_north
+- Compute daily drift speed
+- Save yearly files
+- Compute monthly means and compile all years
 """
 import xarray as xr
 import numpy as np
@@ -16,7 +20,7 @@ os.environ['HDF5_USE_FILE_LOCKING'] = 'FALSE'
 # These 5 tiles cover all Arctic dates
 keep_tiles = [2, 5, 6, 7, 10]
 
-# Set to True to run the computation for that variable
+# Set to False if the daily data has already been subsetted
 sic_daily = False
 
 #### Sea ice concentration and thickness ####
@@ -68,5 +72,5 @@ for year in range(1992, 2018):
 ds = xr.concat(monthly_means, dim='time')
 ds.attrs['processing'] = 'Monthly means computed from daily means, Daniel Watkins and Ashfaq Ahmed, June 2026'
 ds.to_netcdf(saveloc + 'ecco_monthly_sea_ice_concentration_thickness_1992-2017.nc',
-                encoding={v: {'zlib': True} for v in ds.variables},
+                encoding={v: {'zlib': True} for v in variables},
                 engine='netcdf4') 

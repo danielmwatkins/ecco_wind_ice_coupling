@@ -39,16 +39,12 @@ if False:
             for var in variables:
                 lon = ds_nsidc.longitude.data
                 lat = ds_nsidc.latitude.data
-                offset = 1e2
-                ds_in = xr.Dataset({var: (('time', 'j', 'i'), ds_nsidc[var].data + offset)},
+                ds_in = xr.Dataset({var: (('time', 'j', 'i'), ds_nsidc[var].data)},
                                 coords={'time': ds_nsidc['time'].data,
                                         'lon': (('j', 'i'), lon),
                                         'lat': (('j', 'i'), lat)})
-                regridder = xesmf.Regridder(ds_in, ds_out, "bilinear")
+                regridder = xesmf.Regridder(ds_in, ds_out, "bilinear", unmapped_to_nan=True)
                 regridded_data = regridder(ds_in[var]).rename(var)  # Name the DataArray
-                regridded_data = regridded_data.where(regridded_data != 0)
-                regridded_data = regridded_data - offset
-                
                 results.append(regridded_data)
             tile_results.append(xr.merge(results).assign_coords({'tile': tile}))
         ds_merged = xr.concat(tile_results, dim='tile')

@@ -24,7 +24,7 @@ sic_monthly = False
 # so we don't need to do additional subsetting. 
 dataloc = '/Volumes/Research/ENG_Wilhelmus_Shared/group/ECCO/ecco-seaice-concentration/'
 # Data is organized Year / Month / Files
-saveloc = '../../data/ecco_monthly_sea_ice_concentration_by_year/' # One directory up, so not in the GitHub repo
+saveloc = '../../data/' # One directory up, so not in the GitHub repo
 if sic_monthly:
     print("Computing mean sea ice concentration and thickness")
     
@@ -53,7 +53,7 @@ if sic_monthly:
                                      freq='1MS', periods=12)
         
         ds.attrs['processing'] = 'Monthly means computed from daily means, Daniel Watkins and Ashfaq Ahmed, June 2026'
-        ds.to_netcdf(saveloc + "ecco_monthly_mean_sea_ice_concentration_thickness_" + str(year) + '.nc',
+        ds.to_netcdf(saveloc + "ecco_monthly_sea_ice_concentration_by_year/ecco_monthly_mean_sea_ice_concentration_thickness_" + str(year) + '.nc',
                      encoding={v: {'zlib': True} for v in ds.variables},
                      engine='netcdf4')
         ds.close()
